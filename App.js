@@ -2,8 +2,21 @@ import React from 'react';
 import { SafeAreaView, Text, View, StyleSheet } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
+import { StreamChat } from 'stream-chat';
+import PropTypes from 'prop-types';
+import ChannelList from './src/components/ChannelList';
 
-function ChannelScreen({ navigation, route }) {
+const chatClient = new StreamChat('q95x9hkbyd6p');
+const userToken =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidmlzaGFsIn0.LpDqH6U8V8Qg9sqGjz0bMQvOfWrWKAjPKqeODYM0Elk';
+const user = {
+  id: 'vishal',
+  name: 'Vishal',
+};
+
+chatClient.setUser(user, userToken);
+
+function ChannelScreen() {
   return (
     <SafeAreaView>
       <Text>Channel Screen</Text>
@@ -13,9 +26,14 @@ function ChannelScreen({ navigation, route }) {
 
 const ChannelListDrawer = (props) => {
   return (
-    <SafeAreaView>
-      <Text>Drawer</Text>
-    </SafeAreaView>
+    <ChannelList
+      client={chatClient}
+      changeChannel={(channelId) => {
+        props.navigation.jumpTo('ChannelScreen', {
+          channelId,
+        });
+      }}
+    />
   );
 };
 
@@ -54,3 +72,9 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
 });
+
+ChannelListDrawer.propTypes = {
+  navigation: PropTypes.shape({
+    jumpTo: PropTypes.func.isRequired,
+  }).isRequired,
+};
