@@ -8,10 +8,10 @@ import ChannelList from './src/components/ChannelList';
 
 const chatClient = new StreamChat('q95x9hkbyd6p');
 const userToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidmlzaGFsIn0.LpDqH6U8V8Qg9sqGjz0bMQvOfWrWKAjPKqeODYM0Elk';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidG9tbWFzbyJ9.wuLqzU1D6RYKokmzkgyFvQ43lWF7dMVGt5NOLwHNqyc';
 const user = {
-  id: 'vishal',
-  name: 'Vishal',
+  id: 'tommaso',
+  name: 'Tommaso Barbugli',
 };
 
 chatClient.setUser(user, userToken);

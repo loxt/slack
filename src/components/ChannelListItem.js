@@ -11,7 +11,7 @@ const ChannelListItem = ({
   activeChannelId,
   currentUserId,
 }) => {
-  let ChannelPrefix = '';
+  let ChannelPrefix = '-';
   let ChannelTitle = '';
 
   let otherUserId = '';
@@ -45,6 +45,7 @@ const ChannelListItem = ({
       style={{
         ...styles.channelRow,
         backgroundColor: activeChannelId === channel.id ? '#0676db' : '#ccc',
+        color: '#000',
       }}
     >
       <View style={styles.channelTitleContainer}>

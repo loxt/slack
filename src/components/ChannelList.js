@@ -81,21 +81,12 @@ const ChannelList = ({ client, changeChannel }) => {
   );
 };
 
-ChannelList.propTypes = {
-  client: PropTypes.shape({
-    user: PropTypes.object.isRequired,
-    id: PropTypes.number,
-  }).isRequired,
-  changeChannel: PropTypes.func.isRequired,
-};
-
 const useWatchedChannels = (client, changeChannel) => {
   const [activeChannelId, setActiveChannelId] = useState(null);
   const [unreadChannels, setUnreadChannels] = useState([]);
   const [readChannels, setReadChannels] = useState([]);
   const [oneOnOneConversations, setOneOnOneConversations] = useState([]);
   const [hasMoreChannels, setHasMoreChannels] = useState(true);
-
   const filters = {
     type: 'messaging',
     example: 'slack-demo',
@@ -105,8 +96,8 @@ const useWatchedChannels = (client, changeChannel) => {
   };
 
   const sort = { has_unread: -1, cid: -1 };
-  const options = { limit: 30, state: true };
 
+  const options = { limit: 30, state: true };
   useEffect(() => {
     if (!hasMoreChannels) {
       return;
@@ -158,6 +149,74 @@ const useWatchedChannels = (client, changeChannel) => {
     fetchChannels();
   }, [client]);
 
+  useEffect(() => {
+    function handleEvents(e) {
+      if (e.type === 'message.new') {
+        const { cid } = e;
+
+        const channelReadIndex = readChannels.findIndex(
+          (channel) => channel.cid === cid
+        );
+
+        if (channelReadIndex >= 0) {
+          const channel = readChannels[channelReadIndex];
+          readChannels.splice(channelReadIndex, 1);
+          setReadChannels([...readChannels]);
+          setUnreadChannels([channel, ...unreadChannels]);
+        }
+
+        const oneOnOneConversationIndex = oneOnOneConversations.findIndex(
+          (channel) => channel.cid === cid
+        );
+
+        if (oneOnOneConversationIndex >= 0) {
+          const channel = unreadChannels[oneOnOneConversationIndex];
+          oneOnOneConversations.splice(oneOnOneConversationIndex, 1);
+          setOneOnOneConversations([...unreadChannels]);
+          setUnreadChannels([channel, ...unreadChannels]);
+        }
+
+        const channelUnreadIndex = unreadChannels.findIndex(
+          (channel) => channel.cid === cid
+        );
+        if (channelUnreadIndex >= 0) {
+          const channel = unreadChannels[channelUnreadIndex];
+          unreadChannels.splice(channelUnreadIndex, 1);
+          setReadChannels([...readChannels]);
+          setUnreadChannels([channel, ...unreadChannels]);
+        }
+      }
+
+      if (e.type === 'message.read') {
+        if (!e.user.id !== client.user.id) {
+          const { cid } = e;
+          const channelIndex = unreadChannels.findIndex(
+            (channel) => channel.id === cid
+          );
+
+          if (channelIndex > 0) {
+            const channel = unreadChannels[channelIndex];
+
+            unreadChannels.splice(channelIndex, 1);
+            setUnreadChannels([...unreadChannels]);
+
+            if (Object.keys(channel.state.members).length === 2) {
+              setOneOnOneConversations([channel, ...oneOnOneConversations]);
+            } else {
+              setReadChannels([channel, readChannels]);
+            }
+          }
+        }
+      }
+    }
+
+    client.on(handleEvents);
+
+    return () => {
+      client.off(handleEvents);
+    };
+  }, [client, readChannels, unreadChannels, oneOnOneConversations]);
+
   return {
     activeChannelId,
     setActiveChannelId,
@@ -169,7 +228,6 @@ const useWatchedChannels = (client, changeChannel) => {
     setOneOnOneConversations,
   };
 };
-
 const styles = StyleSheet.create({
   container: {
     paddingLeft: 5,
@@ -204,5 +262,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato-Regular',
   },
 });
+
+ChannelList.propTypes = {
+  client: PropTypes.shape({
+    user: PropTypes.object.isRequired,
+    id: PropTypes.number,
+  }).isRequired,
+  changeChannel: PropTypes.func.isRequired,
+};
 
 export default ChannelList;
