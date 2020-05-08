@@ -10,6 +10,8 @@ import {
 import PropTypes from 'prop-types';
 import ChannelListItem from './ChannelListItem';
 
+const renderChannelListItem = (item) => <Text>{item}</Text>;
+
 const ChannelList = ({ client, changeChannel }) => {
   const {
     activeChannelId,

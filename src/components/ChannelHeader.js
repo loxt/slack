@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View, StyleSheet, Image } from 'react-native';
 import iconSearch from '../images/icon-search.png';
 import iconThreeDots from '../images/icon-3-dots.png';
 
-export const ChannelHeader = ({ navigation, channel, client }) => {
+const ChannelHeader = ({ navigation, channel, client }) => {
   let channelTitle = '#channel_name';
 
   if (channel && channel.data && channel.data.name) {
