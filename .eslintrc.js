@@ -27,6 +27,6 @@ module.exports = {
     'react/jsx-filename-extension': 'off',
     'no-use-before-define': 'off',
     'no-underscore-dangle': 'off',
-    'no-used-vars': 'off'
+    'no-unused-vars': 'off'
   },
 };

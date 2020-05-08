@@ -1,25 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Text, View, StyleSheet } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { StreamChat } from 'stream-chat';
 import PropTypes from 'prop-types';
 import ChannelList from './src/components/ChannelList';
+import ChannelHeader from './src/components/ChannelHeader';
 
 const chatClient = new StreamChat('q95x9hkbyd6p');
 const userToken =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidmlzaGFsIn0.LpDqH6U8V8Qg9sqGjz0bMQvOfWrWKAjPKqeODYM0Elk';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidG9tbWFzbyJ9.wuLqzU1D6RYKokmzkgyFvQ43lWF7dMVGt5NOLwHNqyc';
 const user = {
-  id: 'vishal',
-  name: 'Vishal',
+  id: 'tommaso',
+  name: 'Tommaso Barbugli',
 };
 
 chatClient.setUser(user, userToken);
 
-function ChannelScreen() {
+function ChannelScreen({ navigation, route }) {
+  const [channel, setChannel] = useState(null);
+  useEffect(() => {
+    if (!channel) {
+      navigation.openDrawer();
+    }
+    const channelId = route.params ? route.params.channelId : null;
+    const _channel = chatClient.channel('messaging', channelId);
+    setChannel(_channel);
+  }, [route.params]);
+
   return (
-    <SafeAreaView>
-      <Text>Channel Screen</Text>
+    <SafeAreaView style={styles.channelScreenSaveAreaView}>
+      <View style={styles.channelScreenContainer}>
+        <ChannelHeader
+          navigation={navigation}
+          channel={channel}
+          client={chatClient}
+        />
+      </View>
     </SafeAreaView>
   );
 }

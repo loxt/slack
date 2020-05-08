@@ -11,7 +11,7 @@ const ChannelListItem = ({
   activeChannelId,
   currentUserId,
 }) => {
-  let ChannelPrefix = '';
+  let ChannelPrefix = '-';
   let ChannelTitle = '';
 
   let otherUserId = '';
@@ -33,6 +33,13 @@ const ChannelListItem = ({
         {channel.state.members[otherUserId].user.name}
       </Text>
     );
+  } else {
+    ChannelPrefix = <Text style={styles.channelTitlePrefix}>#</Text>;
+    ChannelTitle = (
+      <Text style={isUnread ? styles.unreadChannelTitle : styles.channelTitle}>
+        {channel.data.name && channel.data.name.toLowerCase().replace(' ', '_')}
+      </Text>
+    );
   }
 
   return (
@@ -45,10 +52,12 @@ const ChannelListItem = ({
       style={{
         ...styles.channelRow,
         backgroundColor: activeChannelId === channel.id ? '#0676db' : '#ccc',
+        color: '#000',
       }}
     >
       <View style={styles.channelTitleContainer}>
         <Text>{ChannelPrefix}</Text>
+
         <Text>{ChannelTitle}</Text>
       </View>
       {countUnreadMentions > 0 && (
@@ -86,7 +95,7 @@ ChannelListItem.defaultProps = {
 
 const textStyles = {
   fontFamily: 'Lato-Regular',
-  color: 'white',
+  color: '#000',
   fontSize: 18,
 };
 
