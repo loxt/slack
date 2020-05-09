@@ -16,6 +16,9 @@ import ChannelHeader from './src/components/ChannelHeader';
 import MessageSlack from './src/components/MessageSlack';
 import DateSeparator from './src/components/DateSeparator';
 
+import theme from './src/stream-chat-theme';
+import InputBox from './src/components/InputBox';
+
 const chatClient = new StreamChat('q95x9hkbyd6p');
 const userToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidG9tbWFzbyJ9.wuLqzU1D6RYKokmzkgyFvQ43lWF7dMVGt5NOLwHNqyc';
@@ -46,13 +49,24 @@ function ChannelScreen({ navigation, route }) {
           client={chatClient}
         />
         <View style={styles.chatContainer}>
-          <Chat client={chatClient}>
+          <Chat style={theme} client={chatClient}>
             <Channel channel={channel}>
               <MessageList
                 Message={MessageSlack}
                 DateSeparator={DateSeparator}
               />
-              <MessageInput />
+              <MessageInput
+                Input={InputBox}
+                additionalTextInputProps={{
+                  placeholderTextColor: '#979A9A',
+                  placeholder:
+                    channel && channel.data.name
+                      ? `Message #${channel.data.name
+                          .toLowerCase()
+                          .replace(' ', '_')}`
+                      : 'Message',
+                }}
+              />
             </Channel>
           </Chat>
         </View>
