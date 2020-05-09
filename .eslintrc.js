@@ -27,6 +27,10 @@ module.exports = {
     'react/jsx-filename-extension': 'off',
     'no-use-before-define': 'off',
     'no-underscore-dangle': 'off',
-    'no-unused-vars': 'off'
+    'no-unused-vars': 'off',
+    'react/jsx-props-no-spreading': 'off',
+    'no-return-assign': 'off',
+    'no-unused-expressions': 'off',
+    'react/no-array-index-key': 'off',
   },
 };
