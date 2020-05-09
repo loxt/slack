@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, Text, View, StyleSheet } from 'react-native';
+import { SafeAreaView, View, StyleSheet } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { StreamChat } from 'stream-chat';
@@ -13,6 +13,8 @@ import {
 
 import ChannelList from './src/components/ChannelList';
 import ChannelHeader from './src/components/ChannelHeader';
+import MessageSlack from './src/components/MessageSlack';
+import DateSeparator from './src/components/DateSeparator';
 
 const chatClient = new StreamChat('q95x9hkbyd6p');
 const userToken =
@@ -43,18 +45,32 @@ function ChannelScreen({ navigation, route }) {
           channel={channel}
           client={chatClient}
         />
-      </View>
-      <View style={styles.chatContainer}>
-        <Chat client={chatClient}>
-          <Channel channel={channel}>
-            <MessageList />
-            <MessageInput />
-          </Channel>
-        </Chat>
+        <View style={styles.chatContainer}>
+          <Chat client={chatClient}>
+            <Channel channel={channel}>
+              <MessageList
+                Message={MessageSlack}
+                DateSeparator={DateSeparator}
+              />
+              <MessageInput />
+            </Channel>
+          </Chat>
+        </View>
       </View>
     </SafeAreaView>
   );
 }
+
+ChannelScreen.propTypes = {
+  navigation: PropTypes.shape({
+    openDrawer: PropTypes.func.isRequired,
+  }).isRequired,
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      channelId: PropTypes.string.isRequired,
+    }),
+  }).isRequired,
+};
 
 const ChannelListDrawer = (props) => {
   return (

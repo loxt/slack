@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, TouchableOpacity, View, StyleSheet, Image } from 'react-native';
+import PropTypes from 'prop-types';
 import iconSearch from '../images/icon-search.png';
 import iconThreeDots from '../images/icon-3-dots.png';
 
@@ -38,6 +39,27 @@ const ChannelHeader = ({ navigation, channel, client }) => {
       </View>
     </View>
   );
+};
+
+ChannelHeader.propTypes = {
+  navigation: PropTypes.shape({
+    openDrawer: PropTypes.func.isRequired,
+  }).isRequired,
+  channel: PropTypes.shape({
+    data: PropTypes.shape({
+      name: PropTypes.string,
+    }),
+    state: PropTypes.object,
+  }),
+  client: PropTypes.shape({
+    user: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
+};
+
+ChannelHeader.defaultProps = {
+  channel: '',
 };
 
 const styles = StyleSheet.create({

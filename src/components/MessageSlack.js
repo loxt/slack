@@ -1,14 +1,16 @@
 import React from 'react';
 import { MessageSimple } from 'stream-chat-react-native';
+import PropTypes from 'prop-types';
 import MessageAvatar from './MessageAvatar';
-import MessageHeader from './MessageHeader';
+import { MessageHeader } from './MessageHeader';
 import MessageFooter from './MessageFooter';
 import MessageText from './MessageText';
 import Giphy from './Giphy';
 import UrlPreview from './UrlPreview';
 
 const MessageSlack = (props) => {
-  if (props.message.deleted_at) {
+  const { message } = props;
+  if (message.deleted_at) {
     return null;
   }
 
@@ -25,6 +27,12 @@ const MessageSlack = (props) => {
       Giphy={Giphy}
     />
   );
+};
+
+MessageSlack.propTypes = {
+  message: PropTypes.shape({
+    deleted_at: PropTypes.string,
+  }).isRequired,
 };
 
 export default MessageSlack;

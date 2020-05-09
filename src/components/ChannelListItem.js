@@ -11,8 +11,8 @@ const ChannelListItem = ({
   activeChannelId,
   currentUserId,
 }) => {
-  let ChannelPrefix = '-';
-  let ChannelTitle = '';
+  let ChannelPrefix;
+  let ChannelTitle;
 
   let otherUserId = '';
 
@@ -78,6 +78,7 @@ const PresenceIndicator = (bool) => {
 ChannelListItem.propTypes = {
   channel: PropTypes.shape({
     id: PropTypes.string,
+    data: PropTypes.shape({ name: PropTypes.string }),
     state: PropTypes.object.isRequired,
     countUnreadMentions: PropTypes.func.isRequired,
   }).isRequired,
